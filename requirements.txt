@@ -8,3 +8,4 @@ tqdm
 lxml_html_clean
 nrclex
 textstat
+seaborn
