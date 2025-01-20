@@ -6,6 +6,7 @@ matplotlib
 tqdm
 lxml_html_clean
 nrclex
+pandas
 textstat
 seaborn
 lime
