@@ -59,8 +59,13 @@ class BasicFeatureExtractor:
         for analysis and classification.
     """
     
-    def __init__(self):
-        self.nlp = spacy.load("en_core_web_sm")
+    def __init__(self, dir_path="./spacy_model"):
+        if os.path.isdir(dir_path):
+            print(f"The directory {dir_path} exists.")
+            self.nlp = spacy.load(dir_path)
+        else:
+            print(f"Error: the spacy model directory {dir_path} does not exist.")
+        
 
     def extractExclamationPointFreqs(self, text):
         """
