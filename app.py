@@ -58,6 +58,18 @@ with tabs[0]:
     st.header("Paste URL to News Text Here")
     url = st.text_area("Enter news URL for classification", placeholder="Paste your URL here...", height=68)
     
+    # Add a slider to let users select the number of perturbed samples for LIME explanations
+    num_perturbed_samples = st.slider(
+        "Select the number of perturbed samples for explanation",
+        min_value=25,
+        max_value=500,
+        value=100,  # Default value
+        step=25, # Step size of 25
+        help="Increasing the number of samples will make the outputted explanations more accurate but may take longer to process."
+    )
+    
+    st.write("The more perturbed samples you choose, the more accurate the explanation will be, but it will take longer to compute.")
+    
     if st.button("Classify", key="classify_button"):
         if url.strip():  # Check if input is not empty
             try:
@@ -78,7 +90,7 @@ with tabs[0]:
                             pipeline,
                             news_text,
                             feature_extractor,
-                            num_perturbed_samples=100
+                            num_perturbed_samples=num_perturbed_samples
                         )
                         
                         displayAnalysisResults(explanation_dict, st, news_text, feature_extractor, FEATURE_EXPLANATIONS)
@@ -94,16 +106,28 @@ with tabs[1]:
     st.header("Paste News Text Directly")
     news_text = st.text_area("Paste the news text for classification", placeholder="Paste your news text here...", height=300)
     
+    # Add slider to let users select the number of perturbed samples for LIME explanations
+    num_perturbed_samples = st.slider(
+        "Select the number of perturbed samples for explanation",
+        min_value=25,
+        max_value=500,
+        value=100,  # Default value
+        step=25,
+        help="Increasing the number of samples will make the outputted explanations more accurate but may take longer to process"
+    )
+    
+    st.write("The more perturbed samples you choose, the more accurate the explanation will be, but it will take longer to compute.")
+    
     if st.button("Classify", key="classify_button_text"):
         if news_text.strip():  # Check if input is not empty
             try:
                 # Use the entered text as news text directly for classification
-                with st.spinner("Analyzing text..."):
+                with st.spinner(f"Analyzing text with {num_perturbed_samples} perturbed samples..."):
                     explanation_dict = explainPredictionWithLIME(
                         pipeline,
                         news_text,
                         feature_extractor,
-                        num_perturbed_samples=100
+                        num_perturbed_samples=num_perturbed_samples
                     )
                     
                     displayAnalysisResults(explanation_dict, st, news_text, feature_extractor, FEATURE_EXPLANATIONS)
