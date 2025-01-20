@@ -5,3 +5,4 @@ newspaper3k
 altair
 matplotlib
 tqdm
+lxml_html_clean
