@@ -63,7 +63,7 @@ with tabs[0]:
         "Select the number of perturbed samples for explanation",
         min_value=25,
         max_value=500,
-        value=100,  # Default value
+        value=50,  # Default value
         step=25, # Step size of 25
         help="Increasing the number of samples will make the outputted explanations more accurate but may take longer to process."
     )
@@ -111,7 +111,7 @@ with tabs[1]:
         "Select the number of perturbed samples for explanation",
         min_value=25,
         max_value=500,
-        value=100,  # Default value
+        value=50,  # Default value
         step=25,
         help="Increasing the number of samples will make the outputted explanations more accurate but may take longer to process"
     )
