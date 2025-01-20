@@ -33,12 +33,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from wordcloud import WordCloud
 
-subprocess.run(["python", "-m", "spacy", "download", "en_core_web_lg"])
-
-try:
-    nlp = spacy.load("en_core_web_lg")
-except OSError:
-    nlp = spacy.load("en_core_web_sm")
 
 # Feature extraction and modellibraries
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -70,6 +64,7 @@ class BasicFeatureExtractor:
             print("Loaded pre-saved SpaCy model successfully")
         except Exception as e:
             print(f"Failed to load pre-saved model: {e}")
+            subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
             # Fallback to smaller model if needed
             self.nlp = spacy.load("en_core_web_sm")
 
