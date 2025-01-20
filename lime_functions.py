@@ -57,7 +57,7 @@ import spacy_streamlit
 
 @st.cache_resource
 def downloadSpacyModel():
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+    subprocess.run(["python3", "-m", "spacy", "download", "en_core_web_sm"])
     print("Downloaded Spacy model")
 
 downloadSpacyModel()
