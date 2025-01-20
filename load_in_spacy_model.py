@@ -1,7 +1,7 @@
 import spacy
 
-# Load the spaCy model
-nlp = spacy.load("en_core_web_sm")
+# Load or create your SpaCy model
+nlp = spacy.load("en_core_web_sm")  # Example: you can replace this with your custom model
 
-# Save the model to a directory
-nlp.to_disk("spacy_model_again")
+# Save the model to disk
+nlp.to_disk("spacy_model")  # Replace with the desired path to save the model
