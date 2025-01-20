@@ -1,6 +1,4 @@
 streamlit
-spacy==3.6.0
-https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.6.0/en_core_web_lg-3.6.0-py3-none-any.whl
 joblib
 newspaper3k
 altair
@@ -13,3 +11,4 @@ seaborn
 lime
 scikit-learn
 wordcloud
+spacy

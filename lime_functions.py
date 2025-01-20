@@ -42,6 +42,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import PassiveAggressiveClassifier
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.pipeline import Pipeline
+import pickle
 
 # Web app libraries
 import altair as alt
@@ -50,7 +51,13 @@ import streamlit as st
 # LIME explanation libraries
 from lime.lime_text import LimeTextExplainer
 
+import subprocess
 
+@st.cache_resource
+def downloadSpacyModel():
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+
+downloadSpacyModel()
 
 class BasicFeatureExtractor:
     """
@@ -60,7 +67,7 @@ class BasicFeatureExtractor:
     """
     
     def __init__(self):
-        self.nlp = spacy.load("en_core_web_lg")
+        self.nlp = spacy.load("en_core_web_sm")
 
     def extractExclamationPointFreqs(self, text):
         """
