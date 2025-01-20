@@ -65,7 +65,7 @@ class BasicFeatureExtractor:
     """
     
     def __init__(self, model_path="spacy_model"):
-       try:
+        try:
             self.nlp = spacy.load(model_path)
             print("Loaded pre-saved SpaCy model successfully")
         except Exception as e:
