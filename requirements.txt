@@ -11,3 +11,4 @@ textstat
 seaborn
 lime
 scikit-learn
+wordcloud
