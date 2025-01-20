@@ -9,3 +9,5 @@ lxml_html_clean
 nrclex
 textstat
 seaborn
+lime
+scikit-learn
