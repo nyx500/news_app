@@ -675,7 +675,7 @@ def displayAnalysisResults(explanation_dict, container, news_text, feature_extra
     container.write(f"- Fake News: {probs[1]:.2%}")
     
     # Display highlighted text in an expandable box
-    with st.expander("View Highlighted Text"):
+    with st.expander("View Highlighted Text: blue = pushing prediction to real news, red = pushing prediction to fake news"):
         # Format the expandable scroll-box to show highlighted (blue=real, red=fake) text outputted by LIME Explainer, to allow y-scrolling and padding
         st.markdown("""
             <div style='height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;'>
