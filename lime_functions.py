@@ -59,22 +59,8 @@ class BasicFeatureExtractor:
         for analysis and classification.
     """
     
-    def __init__(self, model_path="./spacy_model"):
-        # Ensure that the model path is correct
-        if os.path.exists(model_path):
-            try:
-                # Load the pre-saved SpaCy model
-                self.nlp = spacy.load(model_path)
-                print("Loaded pre-saved SpaCy model successfully")
-            except Exception as e:
-                print(f"Failed to load pre-saved model: {e}")
-                subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-                self.nlp = spacy.load("en_core_web_sm")  # Fallback to smaller model if needed
-        else:
-            print(f"Model path '{model_path}' not found. Attempting to download the model...")
-            subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-            self.nlp = spacy.load("en_core_web_sm")
-
+    def __init__(self):
+        self.nlp = spacy.load("en_core_web_sm")
 
     def extractExclamationPointFreqs(self, text):
         """
