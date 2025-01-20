@@ -69,8 +69,11 @@ class BasicFeatureExtractor:
     """
     
     def __init__(self):
-        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-        self.nlp = spacy.load("en_core_web_sm")
+        try:
+            self.nlp = spacy.load("en_core_web_sm")
+        except OSError:
+            subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+            self.nlp = spacy.load("en_core_web_sm")
 
     def extractExclamationPointFreqs(self, text):
         """
