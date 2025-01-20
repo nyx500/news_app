@@ -52,6 +52,7 @@ import streamlit as st
 from lime.lime_text import LimeTextExplainer
 
 import subprocess
+import spacy_streamlit
 
 @st.cache_resource
 def downloadSpacyModel():

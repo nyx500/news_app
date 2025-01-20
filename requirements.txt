@@ -12,3 +12,4 @@ lime
 scikit-learn
 wordcloud
 spacy
+spacy_streamlit
