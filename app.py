@@ -12,12 +12,12 @@ import joblib
 import spacy
 import subprocess
 
-@st.cache_resource
-def downloadSpacyModel():
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-    print("Downloaded Spacy model")
-
-downloadSpacyModel()
+#@st.cache_resource
+#def downloadSpacyModel():
+#    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+#    print("Downloaded Spacy model")
+#
+#downloadSpacyModel()
 
 from lime_functions import BasicFeatureExtractor, explainPredictionWithLIME, highlightText, detectWordBoundaries, displayAnalysisResults
 

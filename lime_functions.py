@@ -55,12 +55,12 @@ from lime.lime_text import LimeTextExplainer
 import subprocess
 import spacy_streamlit
 
-@st.cache_resource
-def downloadSpacyModel():
-    subprocess.run(["python3", "-m", "spacy", "download", "en_core_web_sm"])
-    print("Downloaded Spacy model")
+#@st.cache_resource
+#def downloadSpacyModel():
+#    subprocess.run(["python3", "-m", "spacy", "download", "en_core_web_sm"])
+#    print("Downloaded Spacy model")
 
-downloadSpacyModel()
+# downloadSpacyModel()
 
 class BasicFeatureExtractor:
     """
@@ -70,11 +70,12 @@ class BasicFeatureExtractor:
     """
     
     def __init__(self):
-        try:
-            self.nlp = spacy.load("en_core_web_sm")
-        except OSError:
-            subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
-            self.nlp = spacy.load("en_core_web_sm")
+        self.nlp = spacy.load("spacy_model")
+#        try:
+#
+#        except OSError:
+#            subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+#            self.nlp = spacy.load("en_core_web_sm")
 
     def extractExclamationPointFreqs(self, text):
         """
