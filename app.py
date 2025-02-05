@@ -12,13 +12,6 @@ import joblib
 import spacy
 import subprocess
 
-#@st.cache_resource
-#def downloadSpacyModel():
-#    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-#    print("Downloaded Spacy model")
-#
-#downloadSpacyModel()
-
 from lime_functions import BasicFeatureExtractor, explainPredictionWithLIME, highlightText, detectWordBoundaries, displayAnalysisResults
 
 
@@ -65,10 +58,10 @@ with tabs[0]:
         max_value=500,
         value=50,  # Default value
         step=25, # Step size of 25
-        help="Increasing the number of samples will make the outputted explanations more accurate but may take longer to process."
+        help="Increasing the number of samples will make the outputted explanations more accurate but may take longer to process!"
     )
     
-    st.write("The more perturbed samples you choose, the more accurate the explanation will be, but it will take longer to compute.")
+    st.write("The more perturbed samples you choose, the more accurate the explanation will be, but it will take longer to output.")
     
     if st.button("Classify", key="classify_button"):
         if url.strip():  # Check if input is not empty
@@ -96,24 +89,24 @@ with tabs[0]:
                         displayAnalysisResults(explanation_dict, st, news_text, feature_extractor, FEATURE_EXPLANATIONS)
             
             except Exception as e:
-                st.error(f"Error extracting the news text: {e}. Please try a different text.")
+                st.error(f"Error extracting the news text: {e}. Please try a different text!")
         else:
             st.warning("Warning: Please enter some valid news text for classification!")
 
 
 # Second tab: News Input directly as text
 with tabs[1]:
-    st.header("Paste News Text Directly")
+    st.header("Paste News Text In Here Directly")
     news_text = st.text_area("Paste the news text for classification", placeholder="Paste your news text here...", height=300)
     
     # Add slider to let users select the number of perturbed samples for LIME explanations
     num_perturbed_samples = st.slider(
-        "Select the number of perturbed samples for explanation",
+        "Select the number of perturbed samples to use for the explanation",
         min_value=25,
         max_value=500,
-        value=50,  # Default value
+        value=50,  # Default value is 50, sweet spot between time and accuracy of explanations
         step=25,
-        help="Increasing the number of samples will make the outputted explanations more accurate but may take longer to process"
+        help="Warning: Increasing the number of samples will make the outputted explanations more accurate but may take longer to process!"
     )
     
     st.write("The more perturbed samples you choose, the more accurate the explanation will be, but it will take longer to compute.")
@@ -175,7 +168,7 @@ with tabs[2]:
         The charts show **normalized** frequencies, meaning the counts are adjusted for article length to allow fair comparison across
         news texts of varying lengths.
         
-        Summary of Trends:
+        Main Trends:
         
         - Capital letters: Higher frequencies in real news due to using more proper nouns and techical acronyms
         - Third-person pronouns: More common in fake news, suggesting storytelling-like narrative style and person-focused content
@@ -189,7 +182,7 @@ with tabs[2]:
         More feature analysis coming soon!
         """)
 
-# Fourth tab: Word Cloud patterns
+# Fourth tab: Word Clouds
 with tabs[3]:
     st.header("Most Common Named Entities: Real vs Fake News")
     st.write("These word clouds visualize the most frequent named entities (e.g. people, organizations, countries) in real and fake news articles from our training data. The size of each word is proportional to how frequently it appears.")
@@ -216,62 +209,67 @@ with tabs[3]:
         """)
 
 with tabs[4]:
-    st.header("How Does this App Work?")
+    st.header("🤷 How Does this Application Work?")
     
     st.write("""
-    This app uses an Explainable AI (XAI) technique called LIME (Local Interpretable Model-agnostic Explanations) to explain its predictions.
-    Let's break down how it works in simple stages:
+    An algorithm called LIME (Local Interpretable Model-agnostic Explanations) is used in this app to explain the
+    individual predictions made for a news item (i.e. whether the news text is real or fake).
+    Let's explain how it works step-by-step here:
     """)
     
-    # Section 1
-    st.subheader("🔍 The Basic Idea Behind LIME Explanations")
+    st.subheader("⚙️ The Core Concept Behind LIME")
     st.write("""
-    When the app analyzes a news text, it doesn't just give you a "real" or "fake" prediction - it explains WHY it made 
-    that decision by showing which word features, or linguistic features, of the text were the most important for the classification.
+    Whenever this app analyzes a news text, it doesn't just tell you if the news is "fake news" or "real news". The core purpose of
+    LIME is to explain which features of the text led the model to make the outputted decision.
+    As such, highlights WHICH word features, or more high-level semantic and linguistic features (such as use of certain punctuation marks)
+    , in the news text led to the outputted classification. Furthermore, the algorithm also outputs a probability for the text being fake news,
+    thus displaying the confidence  likely it is to be fake, rather than a simple "fake" or "real" label.
     """)
     
-    st.subheader("🍋‍🟩 LIME and the 'Perturbation' Process")
+    st.subheader("🍋‍🟩 How Does LIME Generate the Explanations?")
     st.write("""
-    Imagine you're trying to understand why a chef thinks a meal he has made tastes good. He might try removing different ingredients 
-    one at a time to see what affects the texture and taste the most. LIME does something similar, but with data samples:
+    LIME removes certain words or linguistic features in the news text one-by-one, and runs the trained machine-learning model to see
+    how the outputted probabilities change when the text has been slightly changed.
 
-    1. It takes the news texts and creates many different versions by randomly removing or changing the features in the text
-    2. It runs the changed/perturbed text through a machine-learning classifier and evaluates how much changing the word affects
-    the real vs fake news probability scores outputted by the model
-    3. If changing a particular feature (such as references to people or emotion-bearing words) greatly affects the prediction, 
-       that feature is considered more important for the final decision
+    (a) LIME randomly removes words or linguistic features from the news input
+    (b) It then runs the altered versions of the news texts through the classifier and records how much changing these individual features
+    has impacted the final prediction
+    (c) If changing a specific feature (e.g. emotion score) has a big impact on the final predicted probability, this feature is then assigned a higher importance
+    scor. This importance is then visualized using the graphs and highlighted text
     """)
     
-    st.subheader("📊 Included Features ")
+    st.subheader("📈 Which features have been included here?")
     st.write("""
-    This model considers several key features in text-based news articles:
+    This model classifies news articles based on certain features which were found to be the most useful for discriminating 
+    between real and fake news based on an extensive exploratory data analysis:
 
-    - Writing style (e.g. capital letters, exclamation points)
-    - Language patterns (third-person pronouns, noun-to-verb ratios)
-    - Named entities (people, cardinal numbers)
-    - Emotion words (using the NRC emotion dictionary)
-    - Text complexity (readability scores)
+    - Individual words and groups of words (bigrams and trigrams) that appear more frequently in fake than real news
+    - Use of punctuation (exclamation marks) and capital letters
+    - Grammatical and linguistic patterns such as noun-to-verb ratio
+    - Frequency of PERSON and NUMBER named entities
+    - Positive emotion scores using the NRC Lexicon
+    - Text readability (how complex the text is to read, e.g. how many difficult words are used based on a list from the "textstat" Python library)
     """)
     
-    with st.expander("🤔 Why These Features?"):
+    with st.expander("⁉️ Why Were THESE Particular Features Chosen?"):
         st.write("""
-        These features were chosen based on extensive research and analysis into the differences between real and fake news
-        over four well-known fake news datasets.
+        These features were engineered based on a detailed exploratory analysis focusing on the key differences between real and fake news
+        over four benchmark datasets: WELFake (general news), Constraint (COVID-19 related health news), PolitiFact (political news),
+        and GossipCop (celebrity and entertainment news).
         
-        - Fake news often uses more sensational, inflammatory language and exclamation points
-        - Real news tends to include more specific details, such as more nouns than verbs, as well as more numbers
-        - The writing style (like using more third person pronouns) can be an indicator of disinformation
-        - Readability and difficult word usage can also differ between real and fake news
-        
-        However, fake news is constantly evolving, and no one feature is enough to understand how the content
-        differs from that of real news. Rather, it's the combination of many features that helps make the determination.
+        - Fake news is often associated with a more sensational style (e.g. using more exclamation points) than real news, and more "clickbaity" language
+        - Real news tends to use more nouns than verbs, as well as more references to numbers, signalling a more factal style
+        - Narrative style (e.g. using more third-person pronouns for a more "storytelling" style) can be an indicator of fake news
+        - How easy the text is to read and difficult word usage can also help the classifier distinguish between real and fake news,
+        as fake news is often easier to digest and less challenging.
         """)
-    
-    st.subheader("⚠️ Important Notes and Ethical Information on How to Use the App")
+        
+    st.subheader("😐 Disclaimer: Limitations of the Model")
     st.write("""
-    - The app's explanations are based on patterns found in our training data
-    - These patterns might not apply to all cases or newer forms of fake news
-    - The app is a tool to assist and enrich human judgment, not replace it
-    - Use fact-checking and claim-busting websites to check out sources
+        Please bear in mind that patterns characterizing disinformation and fake news are rapidly evolving, particularly with the rise of generative AI.
+        No single feature is sufficient to distinguish between real and fake news: it is rather a combination of the features that the classifier uses to
+        make the predictions. The patterns highlighted in these explanations are based on this specific training data from four well-known fake news datasets; however,
+        they may not apply to newer forms of disinformation, particularly given the rise of new technologies for disinformation production. It is recommended to
+        also use fact-checking and claim-busting websites to check out whether the sources of information are legitimate.
     """)
-
+    
